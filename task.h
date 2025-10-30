@@ -46,6 +46,7 @@ public:
     void execute() override;
 
 private:
+    void executeTask();
 };
 
 class ControlTask : public GeneralTask
@@ -56,6 +57,7 @@ public:
     void execute() override;
 
 private:
+    void executeTask();
 };
 
 class ProcessTask : public GeneralTask
@@ -66,6 +68,7 @@ public:
     void execute() override;
 
 private:
+    void executeTask();
 };
 
 
