@@ -3,8 +3,10 @@
 
 #include "task.h"
 #include <atomic>
+#include <mutex>
 #include <vector>
 #include <thread>
+
 
 class TaskScheduler
 {
@@ -15,17 +17,21 @@ public:
     void start();
     void stop();
 
-
 private:
     void startExecutionTask();
+    void submitTaskTask(std::unique_ptr<Task> task);
 
 private:
     // Your implementation here
 
     std::vector<std::unique_ptr<Task>> tasks_;
     int currrentPriority_;
-    std::thread startExecutionThread;
+
+    std::thread startExecutionThread_;
+    std::thread submitTaskThread_;
+
     std::atomic_bool onPending_;
+    std::mutex tasksMutex_;
 
 
 };
