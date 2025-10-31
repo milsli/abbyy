@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <chrono>
+#include <unordered_set>
 
 class Task
 {
@@ -17,6 +18,8 @@ public:
     virtual void execute() = 0;
     virtual TaskId getId() const = 0;
     virtual Priority getPriority() const = 0;
+    virtual void setDependentTask(const TaskId taskId) = 0;
+    virtual void removeDependentTask(const TaskId taskId) = 0;
 
 protected:
     virtual void executeTask() = 0;
@@ -27,6 +30,7 @@ public:
 protected:
     TaskId taskId_;
     Priority priority_;
+    std::unordered_set<TaskId> dependencies_;
 };
 
 class GeneralTask : public Task
@@ -37,6 +41,8 @@ public:
     TaskId getId() const override;
     Priority getPriority() const override;
     void execute() override;
+    void setDependentTask(const TaskId taskId) override;
+    void removeDependentTask(const TaskId taskId) override;
 };
 
 class SecurityTask : public GeneralTask

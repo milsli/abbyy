@@ -9,7 +9,7 @@ Task::TaskId Task::taskIdCounter_ = 1;
 
 Task::Task(Priority priority)
 {
-    taskId_ = taskIdCounter_++;
+    taskId_ = taskIdCounter_++;     // maybe % 0xffffffffff
     priority_ = priority;
 }
 
@@ -31,6 +31,16 @@ void GeneralTask::execute()
 {
     thread th = thread(&GeneralTask::executeTask, this);
     th.join();
+}
+
+void GeneralTask::setDependentTask(const TaskId taskId)
+{
+    dependencies_.emplace(taskId);
+}
+
+void GeneralTask::removeDependentTask(const TaskId taskId)
+{
+    dependencies_.erase(taskId);
 }
 
 SecurityTask::SecurityTask(Priority priority) : GeneralTask(priority)
