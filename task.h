@@ -12,13 +12,14 @@ public:
     using Priority = int;
 
     Task(Priority priority);
-    // Task(const Task&) = delete;
-    // Task& operator=(const Task&) = delete;
 
     virtual ~Task() = default;
     virtual void execute() = 0;
     virtual TaskId getId() const = 0;
     virtual Priority getPriority() const = 0;
+
+protected:
+    virtual void executeTask() = 0;
 
 public:
     static TaskId taskIdCounter_;
@@ -35,7 +36,7 @@ public:
 
     TaskId getId() const override;
     Priority getPriority() const override;
-
+    void execute() override;
 };
 
 class SecurityTask : public GeneralTask
@@ -43,10 +44,8 @@ class SecurityTask : public GeneralTask
 public:
     SecurityTask(Priority priority);
 
-    void execute() override;
-
 private:
-    void executeTask();
+    void executeTask() override;
 };
 
 class ControlTask : public GeneralTask
@@ -54,10 +53,8 @@ class ControlTask : public GeneralTask
 public:
     ControlTask(Priority priority);
 
-    void execute() override;
-
 private:
-    void executeTask();
+    void executeTask() override;
 };
 
 class ProcessTask : public GeneralTask
@@ -65,10 +62,8 @@ class ProcessTask : public GeneralTask
 public:
     ProcessTask(Priority priority);
 
-    void execute() override;
-
 private:
-    void executeTask();
+    void executeTask() override;
 };
 
 

@@ -43,7 +43,15 @@ int main()
 
     scheduler.start();
 
-    this_thread::sleep_for(std::chrono::milliseconds { 2000 });
+    this_thread::sleep_for(std::chrono::milliseconds { 100 });
+    ProcessTask pTask5(2);
+    scheduler.submitTask(std::move(std::make_unique<ProcessTask>(pTask5)));
+
+    this_thread::sleep_for(std::chrono::milliseconds { 100 });
+    ProcessTask pTask6(1);
+    scheduler.submitTask(std::move(std::make_unique<ProcessTask>(pTask6)));
+
+    this_thread::sleep_for(std::chrono::milliseconds { 3000 });
 
     scheduler.stop();
 

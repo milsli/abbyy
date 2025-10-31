@@ -29,7 +29,6 @@ void TaskScheduler::start()
 void TaskScheduler::stop()
 {
     onPending_ = false;
-
     if (startExecutionThread_.joinable())
         startExecutionThread_.join();
 }
@@ -69,9 +68,11 @@ void TaskScheduler::startExecutionTask()
 void TaskScheduler::submitTaskTask(unique_ptr<Task> task)
 {
     lock_guard lock(tasksMutex_);
+
     Task::Priority newTaskPriority = task->getPriority();
     if (currrentPriority_ > newTaskPriority) {
         currrentPriority_ = newTaskPriority;
     }
+
     tasks_.emplace_back(std::move(task));
 }

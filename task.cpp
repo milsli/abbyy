@@ -27,15 +27,15 @@ Task::Priority GeneralTask::getPriority() const
     return priority_;
 }
 
+void GeneralTask::execute()
+{
+    thread th = thread(&GeneralTask::executeTask, this);
+    th.join();
+}
+
 SecurityTask::SecurityTask(Priority priority) : GeneralTask(priority)
 {
 
-}
-
-void SecurityTask::execute()
-{
-    thread th = thread(&SecurityTask::executeTask, this);
-    th.join();
 }
 
 void SecurityTask::executeTask()
@@ -50,12 +50,6 @@ ControlTask::ControlTask(Priority priority) : GeneralTask(priority)
 
 }
 
-void ControlTask::execute()
-{
-    thread th = thread(&ControlTask::executeTask, this);
-    th.join();
-}
-
 void ControlTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
@@ -65,12 +59,6 @@ void ControlTask::executeTask()
 
 ProcessTask::ProcessTask(Priority priority) : GeneralTask(priority)
 {
-}
-
-void ProcessTask::execute()
-{
-    thread th = thread(&ProcessTask::executeTask, this);
-    th.join();
 }
 
 void ProcessTask::executeTask()
