@@ -15,6 +15,7 @@ Task::Task(Priority priority)
 
 GeneralTask::GeneralTask(Priority priority) : Task(priority)
 {
+    taskType_ = "GeneralTask";
 }
 
 Task::TaskId GeneralTask::getId() const
@@ -50,36 +51,37 @@ bool GeneralTask::isIndependent()
 
 SecurityTask::SecurityTask(Priority priority) : GeneralTask(priority)
 {
-
+    taskType_ = "SecurityTask";
 }
 
 void SecurityTask::executeTask()
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cerr << "\n Execution of SecurityTask nr: " << taskId_ << "  priority: " << priority_;
+    std::this_thread::sleep_for(std::chrono::milliseconds { 50 });    
+    std::cerr << "\n Execution of " << taskType_ << " id: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 
 ControlTask::ControlTask(Priority priority) : GeneralTask(priority)
 {
-
+    taskType_ = "ControlTask";
 }
 
 void ControlTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cerr << "\n Execution of ControlTask nr: " << taskId_ << "  priority: " << priority_;
+    std::cerr << "\n Execution of " << taskType_ << " id: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 
 ProcessTask::ProcessTask(Priority priority) : GeneralTask(priority)
 {
+    taskType_ = "ProcessTask";
 }
 
 void ProcessTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cerr << "\n Execution of ProcessTask nr: " << taskId_ << "  priority: " << priority_;
+    std::cerr << "\n Execution of " << taskType_ << " id: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 

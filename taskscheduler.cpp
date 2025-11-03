@@ -47,12 +47,15 @@ void TaskScheduler::startExecutionTask()
             lock_guard lock(tasksMutex_);
 
             dependencyActualization();
-            getWaitingTastToExecute();
+            currentTask = getWaitingTaskToExecute();
+            if (currentTask != nullptr) {
+                taskForExecution = true;
+            }
 
-            if (!tasks_.empty()) {
+            if (!tasks_.empty() && currentTask == nullptr) {
                 priorityIterator = std::find_if(tasks_.begin(), tasks_.end(), [&](const unique_ptr<Task> &task)
                                                 {
-                                                    return task->getPriority() <= currrentPriority_;
+                                                    return task->getPriority() == currrentPriority_;
                                                 });
 
                 if (priorityIterator != tasks_.end()) {
@@ -100,15 +103,18 @@ void TaskScheduler::dependencyActualization()
     }
 }
 
-void TaskScheduler::getWaitingTastToExecute()
+unique_ptr<Task> TaskScheduler::getWaitingTaskToExecute()
 {
+    unique_ptr<Task> retValue = nullptr;
     auto it = find_if(waitingQueue_.begin(), waitingQueue_.end(), [](const unique_ptr<Task>& task)
             {
                 return task->isIndependent();
             });
 
     if (it != waitingQueue_.end()) {
-        tasks_.push_back(std::move(*it));
+        retValue = std::move(*it);
         waitingQueue_.erase(it);
     }
+
+    return retValue;
 }

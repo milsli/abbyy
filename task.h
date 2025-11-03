@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <chrono>
+#include <string>
 #include <unordered_set>
 
 class Task
@@ -45,6 +46,9 @@ public:
     void setOverridingTask(const TaskId taskId) override;
     void removeDependentTask(const TaskId taskId) override;
     bool isIndependent() override;
+
+protected:
+    std::string taskType_;
 };
 
 class SecurityTask : public GeneralTask

@@ -22,7 +22,7 @@ private:
     void startExecutionTask();
     void submitTaskTask(std::unique_ptr<Task> task);
     void dependencyActualization();
-    void getWaitingTastToExecute();
+    std::unique_ptr<Task> getWaitingTaskToExecute();
 
 private:
 
