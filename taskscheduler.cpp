@@ -46,15 +46,13 @@ void TaskScheduler::startExecutionTask()
         {
             lock_guard lock(tasksMutex_);
 
-            // dependencyActualization();
-            // getWaitingTastToExecute();
-            if (currentTask != nullptr)
-                taskForExecution = true;
+            dependencyActualization();
+            getWaitingTastToExecute();
 
-            if (!tasks_.empty() && currentTask == nullptr) {
+            if (!tasks_.empty()) {
                 priorityIterator = std::find_if(tasks_.begin(), tasks_.end(), [&](const unique_ptr<Task> &task)
                                                 {
-                                                    return task->getPriority() == currrentPriority_;
+                                                    return task->getPriority() <= currrentPriority_;
                                                 });
 
                 if (priorityIterator != tasks_.end()) {
@@ -102,7 +100,6 @@ void TaskScheduler::dependencyActualization()
     }
 }
 
-// Queue checking. If there are no dependencies getting task to execute
 void TaskScheduler::getWaitingTastToExecute()
 {
     auto it = find_if(waitingQueue_.begin(), waitingQueue_.end(), [](const unique_ptr<Task>& task)

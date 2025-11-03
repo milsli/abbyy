@@ -21,7 +21,7 @@ int main()
     ProcessTask pTask3(1);
     ProcessTask pTask4(2);
 
-    // sTask1.setOverridingTask(cTask1.getId());
+    sTask1.setOverridingTask(cTask1.getId());
 
 
 

@@ -56,7 +56,7 @@ SecurityTask::SecurityTask(Priority priority) : GeneralTask(priority)
 void SecurityTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cout << "\n Execution of SecurityTask nr: " << taskId_ << "  priority: " << priority_;
+    std::cerr << "\n Execution of SecurityTask nr: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 
@@ -68,7 +68,7 @@ ControlTask::ControlTask(Priority priority) : GeneralTask(priority)
 void ControlTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cout << "\n Execution of ControlTask nr: " << taskId_ << "  priority: " << priority_;
+    std::cerr << "\n Execution of ControlTask nr: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 
@@ -79,7 +79,7 @@ ProcessTask::ProcessTask(Priority priority) : GeneralTask(priority)
 void ProcessTask::executeTask()
 {
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
-    std::cout << "\n Execution of ProcessTask nr: " << taskId_ << "  priority: " << priority_;
+    std::cerr << "\n Execution of ProcessTask nr: " << taskId_ << "  priority: " << priority_;
     std::this_thread::sleep_for(std::chrono::milliseconds { 50 });
 }
 
