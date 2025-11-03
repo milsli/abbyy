@@ -33,7 +33,7 @@ void GeneralTask::execute()
     th.join();
 }
 
-void GeneralTask::setDependentTask(const TaskId taskId)
+void GeneralTask::setOverridingTask(const TaskId taskId)
 {
     dependencies_.emplace(taskId);
 }
@@ -41,6 +41,11 @@ void GeneralTask::setDependentTask(const TaskId taskId)
 void GeneralTask::removeDependentTask(const TaskId taskId)
 {
     dependencies_.erase(taskId);
+}
+
+bool GeneralTask::isIndependent()
+{
+    return dependencies_.empty();
 }
 
 SecurityTask::SecurityTask(Priority priority) : GeneralTask(priority)

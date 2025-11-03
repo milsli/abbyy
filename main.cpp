@@ -21,6 +21,10 @@ int main()
     ProcessTask pTask3(1);
     ProcessTask pTask4(2);
 
+    // sTask1.setOverridingTask(cTask1.getId());
+
+
+
     std::vector<std::unique_ptr<Task>> tasks;
     tasks.push_back(std::make_unique<SecurityTask>(sTask1));
     tasks.push_back(std::make_unique<SecurityTask>(sTask2));

@@ -4,6 +4,7 @@ using namespace std;
 
 TaskScheduler::TaskScheduler()
     : currrentPriority_{ 1 }
+    , executedTaskId_ { 0 }
 {
     onPending_ = false;
 }
@@ -29,6 +30,7 @@ void TaskScheduler::start()
 void TaskScheduler::stop()
 {
     onPending_ = false;
+
     if (startExecutionThread_.joinable())
         startExecutionThread_.join();
 }
@@ -43,25 +45,41 @@ void TaskScheduler::startExecutionTask()
         bool taskForExecution = false;
         {
             lock_guard lock(tasksMutex_);
-            if (!tasks_.empty()) {
 
+            // dependencyActualization();
+            // getWaitingTastToExecute();
+            if (currentTask != nullptr)
+                taskForExecution = true;
+
+            if (!tasks_.empty() && currentTask == nullptr) {
                 priorityIterator = std::find_if(tasks_.begin(), tasks_.end(), [&](const unique_ptr<Task> &task)
                                                 {
                                                     return task->getPriority() == currrentPriority_;
                                                 });
 
                 if (priorityIterator != tasks_.end()) {
-                    taskForExecution = true;
-                    swap(*priorityIterator, tasks_.back());
-                    currentTask = std::move(tasks_.back());
+
+                    if ((*priorityIterator)->isIndependent()) {
+                        swap(*priorityIterator, tasks_.back());
+                        currentTask = std::move(tasks_.back());
+                        taskForExecution = true;
+                    } else {
+                        // task to waiting queue
+                        swap(*priorityIterator, tasks_.back());
+                        waitingQueue_.emplace_back(std::move(tasks_.back()));
+                    }
                     tasks_.pop_back();
                 } else {
                     ++currrentPriority_;
                 }
+            } else {
+                this_thread::sleep_for(chrono::milliseconds{ 100 });
             }
         }
-        if (taskForExecution)
+        if (taskForExecution) {
             currentTask->execute();
+            executedTaskId_ = currentTask->getId();
+        }
     }
 }
 
@@ -75,4 +93,25 @@ void TaskScheduler::submitTaskTask(unique_ptr<Task> task)
     }
 
     tasks_.emplace_back(std::move(task));
+}
+
+void TaskScheduler::dependencyActualization()
+{
+    for (auto &waitingTask: waitingQueue_) {
+        waitingTask->removeDependentTask(executedTaskId_);
+    }
+}
+
+// Queue checking. If there are no dependencies getting task to execute
+void TaskScheduler::getWaitingTastToExecute()
+{
+    auto it = find_if(waitingQueue_.begin(), waitingQueue_.end(), [](const unique_ptr<Task>& task)
+            {
+                return task->isIndependent();
+            });
+
+    if (it != waitingQueue_.end()) {
+        tasks_.push_back(std::move(*it));
+        waitingQueue_.erase(it);
+    }
 }

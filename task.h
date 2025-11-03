@@ -18,8 +18,9 @@ public:
     virtual void execute() = 0;
     virtual TaskId getId() const = 0;
     virtual Priority getPriority() const = 0;
-    virtual void setDependentTask(const TaskId taskId) = 0;
+    virtual void setOverridingTask(const TaskId taskId) = 0;
     virtual void removeDependentTask(const TaskId taskId) = 0;
+    virtual bool isIndependent() = 0;
 
 protected:
     virtual void executeTask() = 0;
@@ -38,11 +39,12 @@ class GeneralTask : public Task
 public:
     GeneralTask(Priority priority);
 
+    void execute() override;
     TaskId getId() const override;
     Priority getPriority() const override;
-    void execute() override;
-    void setDependentTask(const TaskId taskId) override;
+    void setOverridingTask(const TaskId taskId) override;
     void removeDependentTask(const TaskId taskId) override;
+    bool isIndependent() override;
 };
 
 class SecurityTask : public GeneralTask

@@ -6,6 +6,7 @@
 #include <mutex>
 #include <vector>
 #include <thread>
+#include <list>
 
 
 class TaskScheduler
@@ -20,10 +21,14 @@ public:
 private:
     void startExecutionTask();
     void submitTaskTask(std::unique_ptr<Task> task);
+    void dependencyActualization();
+    void getWaitingTastToExecute();
 
 private:
 
     std::vector<std::unique_ptr<Task>> tasks_;
+    std::list<std::unique_ptr<Task>> waitingQueue_;
+
     int currrentPriority_;
 
     std::thread startExecutionThread_;
@@ -31,6 +36,8 @@ private:
 
     std::atomic_bool onPending_;
     std::mutex tasksMutex_;
+
+    Task::TaskId executedTaskId_;
 
 
 };
